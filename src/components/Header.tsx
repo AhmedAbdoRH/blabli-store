@@ -578,9 +578,10 @@ export default function Header({ storeSettings }: HeaderProps) {
                           <li key={category.id} className="border-b border-gray-200 last:border-0">
                             <Link 
                               to={`/category/${category.id}`}
-                              className="block px-5 py-4 text-black hover:bg-gray-100 transition-colors text-base font-medium"
+                              className="flex items-center gap-3 px-5 py-4 text-black hover:bg-gray-100 transition-colors text-base font-medium"
                               onClick={() => setIsMenuOpen(false)}
                             >
+                              {category.image_url && <img src={category.image_url} alt={category.name} className="w-8 h-8 rounded-full object-cover" />}
                               {category.name}
                             </Link>
                           </li>

@@ -104,6 +104,9 @@ export default function CategoryProducts() {
 
         <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 border border-white/10 shadow-2xl shadow-black/40">
           <h1 className="text-3xl font-bold mb-12 text-accent">{category.name}</h1>
+          {category.image_url && (
+            <img src={category.image_url} alt={category.name} className="w-full max-w-md h-48 object-cover rounded-xl mb-8" />
+          )}
           {category.description && (
             <p className="text-secondary/70 mb-8">{category.description}</p>
           )}

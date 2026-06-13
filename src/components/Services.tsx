@@ -186,7 +186,7 @@ export default function Services() {
               <motion.button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`px-6 py-2 transition-all duration-300 text-sm font-medium ${
+                className={`px-6 py-2 transition-all duration-300 text-sm font-medium flex items-center gap-2 ${
                   category.id === selectedCategory
                     ? `bg-red-500 text-white`
                     : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
@@ -196,6 +196,7 @@ export default function Services() {
                   visible: { opacity: 1, y: 0 },
                 }}
               >
+                {category.image_url && <img src={category.image_url} alt={category.name} className="w-5 h-5 rounded-full object-cover" />}
                 {category.name}
               </motion.button>
             ))}

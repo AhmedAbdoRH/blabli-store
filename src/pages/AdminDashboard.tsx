@@ -28,6 +28,7 @@ export default function AdminDashboard({ onSettingsUpdate }: AdminDashboardProps
   const [error, setError] = useState<string | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingBannerImage, setUploadingBannerImage] = useState(false);
+  const [uploadingCategoryImage, setUploadingCategoryImage] = useState(false);
   const [editingService, setEditingService] = useState<string | null>(null);
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
@@ -47,7 +48,7 @@ export default function AdminDashboard({ onSettingsUpdate }: AdminDashboardProps
   const [productsSubTab, setProductsSubTab] = useState<'services' | 'categories'>('services');
   const [bannersSubTab, setBannersSubTab] = useState<'text' | 'image'>('image');
 
-  const [newCategory, setNewCategory] = useState({ name: '', description: '' });
+  const [newCategory, setNewCategory] = useState({ name: '', description: '', image_url: '' });
   const [newService, setNewService] = useState({
     title: '',
     description: '',
@@ -454,12 +455,23 @@ export default function AdminDashboard({ onSettingsUpdate }: AdminDashboardProps
     setKeywords(prev => prev.filter((_, index) => index !== indexToRemove));
   };
 
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>, type: 'service' | 'banner' = 'service') => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>, type: 'service' | 'banner' | 'category' = 'service') => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const uploadingState = type === 'service' ? setUploadingImage : setUploadingBannerImage;
-    const setNewState = type === 'service' ? setNewService : setNewBanner;
+    const uploadingStateSetters = {
+      service: setUploadingImage,
+      banner: setUploadingBannerImage,
+      category: setUploadingCategoryImage
+    };
+    const setNewStateSetters = {
+      service: setNewService,
+      banner: setNewBanner,
+      category: setNewCategory
+    };
+
+    const uploadingState = uploadingStateSetters[type];
+    const setNewState = setNewStateSetters[type];
 
     uploadingState(true);
     setError(null);
@@ -497,7 +509,7 @@ export default function AdminDashboard({ onSettingsUpdate }: AdminDashboardProps
     try {
       const { error } = await supabase.from('categories').insert([newCategory]);
       if (error) throw error;
-      setNewCategory({ name: '', description: '' });
+      setNewCategory({ name: '', description: '', image_url: '' });
       await fetchData();
     } catch (err: any) {
       setError(`خطأ في إضافة القسم: ${err.message}`);
@@ -508,7 +520,7 @@ export default function AdminDashboard({ onSettingsUpdate }: AdminDashboardProps
 
   const handleEditCategory = (category: Category) => {
     setEditingCategory(category.id);
-    setNewCategory({ name: category.name, description: category.description || '' });
+    setNewCategory({ name: category.name, description: category.description || '', image_url: category.image_url || '' });
     const formElement = document.getElementById('category-form');
     formElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -524,11 +536,11 @@ export default function AdminDashboard({ onSettingsUpdate }: AdminDashboardProps
     try {
       const { error } = await supabase
         .from('categories')
-        .update({ name: newCategory.name, description: newCategory.description })
+        .update({ name: newCategory.name, description: newCategory.description, image_url: newCategory.image_url || null })
         .eq('id', editingCategory);
       if (error) throw error;
 
-      setNewCategory({ name: '', description: '' });
+      setNewCategory({ name: '', description: '', image_url: '' });
       setEditingCategory(null);
       await fetchData();
     } catch (err: any) {
@@ -540,7 +552,7 @@ export default function AdminDashboard({ onSettingsUpdate }: AdminDashboardProps
 
   const handleCancelEditCategory = () => {
     setEditingCategory(null);
-    setNewCategory({ name: '', description: '' });
+    setNewCategory({ name: '', description: '', image_url: '' });
     setError(null);
   };
 
@@ -2224,6 +2236,35 @@ export default function AdminDashboard({ onSettingsUpdate }: AdminDashboardProps
                           className={`w-full p-3 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#34C759] focus:border-transparent bg-black/20 backdrop-blur-sm border border-white/10 disabled:opacity-50`}
                           disabled={isLoading}
                         />
+                        <div className="space-y-2">
+                          <label className="block text-gray-300 font-medium">صورة القسم (اختياري)</label>
+                          <div className="flex items-center gap-3">
+                            <label className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer transition-colors font-bold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black/30 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                              <Upload size={18} />
+                              {uploadingCategoryImage ? 'جاري الرفع...' : 'رفع صورة'}
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => handleImageUpload(e, 'category')}
+                                disabled={uploadingCategoryImage}
+                              />
+                            </label>
+                            {newCategory.image_url && (
+                              <button
+                                type="button"
+                                onClick={() => setNewCategory(prev => ({ ...prev, image_url: '' }))}
+                                className="text-red-500 hover:text-red-400 p-1"
+                                title="إزالة الصورة"
+                              >
+                                <X size={18} />
+                              </button>
+                            )}
+                          </div>
+                          {newCategory.image_url && (
+                            <img src={newCategory.image_url} alt="صورة القسم" className="w-32 h-32 object-cover rounded-lg border border-gray-700" />
+                          )}
+                        </div>
                         <div className="flex gap-3">
                           <button
                             type="submit"
@@ -2256,6 +2297,9 @@ export default function AdminDashboard({ onSettingsUpdate }: AdminDashboardProps
                         {categories.map((category) => (
                           <div key={category.id} className={`border border-gray-700/50 p-4 rounded-lg bg-gradient-to-r from-gray-800/40 to-gray-900/30 transition-all duration-300 ${editingCategory === category.id ? `ring-2 ring-[#34C759] shadow-lg shadow-[#34C759]/20` : 'hover:border-gray-600 hover:bg-gray-800/60'}`}>
                             <div className="flex justify-between items-start gap-4">
+                              {category.image_url && (
+                                <img src={category.image_url} alt={category.name} className="w-16 h-16 object-cover rounded-lg flex-shrink-0" />
+                              )}
                               <div className="flex-1 overflow-hidden">
                                 <h4 className="font-bold text-white text-lg truncate" title={category.name}>{category.name}</h4>
                                 {category.description && <p className="text-gray-400 text-sm mt-1 line-clamp-2">{category.description}</p>}

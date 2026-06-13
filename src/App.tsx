@@ -11,6 +11,7 @@ import Services from './components/Services';
 import Footer from './components/Footer';
 import Testimonials from './components/Testimonials';
 import WhatsAppButton from './components/WhatsAppButton';
+import CategoryCards from './components/CategoryCards';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import ServiceDetails from './pages/ServiceDetails';
@@ -181,7 +182,7 @@ function App() {
     <ThemeProvider>
       <CartProvider>
         <Helmet>
-          <title>{storeSettings?.meta_title || storeSettings?.store_name || 'متجر إلكتروني'}</title>
+          <title>{storeSettings?.meta_title || storeSettings?.store_name || 'AliBek'}</title>
           <meta name="description" content={storeSettings?.meta_description || storeSettings?.store_description || 'أفضل المنتجات والعروض'} />
           {storeSettings?.keywords && storeSettings.keywords.length > 0 && (
             <meta name="keywords" content={storeSettings.keywords.join(', ')} />
@@ -253,6 +254,7 @@ function StaggeredHome({
     <>
       {/* About section is part of the staggered load */}
       <About />
+      <CategoryCards />
       {/* Services component is part of the staggered load */}
       <Services onLoaded={() => { /* Optionally handle service load */ }} />
       {/* You can add more home page sections here to stagger them if needed */}

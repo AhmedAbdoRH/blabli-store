@@ -115,6 +115,7 @@ export default function Services() {
                   : 'bg-black/20 text-white hover:bg-black/30 hover:shadow-md'
               }`}
             >
+              {category.image_url && <img src={category.image_url} alt={category.name} className="w-12 h-12 rounded-full object-cover mx-auto mb-2" />}
               <h3 className="text-lg font-semibold mb-1">{category.name}</h3>
               {category.description && (
                 <p className="text-sm opacity-80">{category.description}</p>

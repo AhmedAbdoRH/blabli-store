@@ -210,18 +210,7 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
                 />
               </div>
 
-              {/* ظل/انعكاس سفلي للبانر النشط */}
-              {isActive && (
-                <div
-                  className="absolute left-0 right-0 -bottom-1 h-6 rounded-3xl"
-                  style={{
-                    background: 'rgba(15,72,125,0.4)',
-                    filter: 'blur(24px)',
-                    transform: 'scaleY(-1)',
-                    opacity: 0.5,
-                  }}
-                />
-              )}
+              {/* ظل/انعكاس سفلي للبانر النشط - تم إزالة الظل الأزرق */}
             </motion.div>
             </div>
           );

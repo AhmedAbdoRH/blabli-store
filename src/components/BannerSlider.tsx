@@ -91,23 +91,12 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
         }
       `}</style>
 
-      {/* الإضاءة الخلفية المتوهجة - تعكس لون البانر النشط */}
+      {/* توهج أزرق خفي في الخلفية */}
       <div
-        className="absolute inset-0 transition-all duration-1000"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse at center, rgba(15, 72, 125, 0.25) 0%, rgba(7, 37, 68, 0.1) 40%, transparent 70%)`,
-          filter: 'blur(40px)',
-        }}
-      />
-
-      {/* منصة عاكسة سفلية */}
-      <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2"
-        style={{
-          width: '70%',
-          height: '120px',
-          background: 'radial-gradient(ellipse at center top, rgba(15,72,125,0.18), transparent 70%)',
-          filter: 'blur(20px)',
+          background: 'radial-gradient(ellipse at center, rgba(15, 72, 125, 0.08) 0%, transparent 60%)',
+          filter: 'blur(60px)',
         }}
       />
 
@@ -161,7 +150,7 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
                 className="relative w-full h-full rounded-3xl overflow-hidden"
                 style={{
                   boxShadow: isActive
-                    ? '0 50px 100px -20px rgba(15,72,125,0.55), 0 30px 60px -30px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.08)'
+                    ? '0 30px 60px -20px rgba(0,0,0,0.45), 0 0 60px -10px rgba(15,72,125,0.15), inset 0 0 0 1px rgba(255,255,255,0.08)'
                     : '0 30px 70px -25px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.05)',
                   transformStyle: 'preserve-3d',
                 }}

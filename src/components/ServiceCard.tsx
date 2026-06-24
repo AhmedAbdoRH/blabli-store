@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MessageCircle, ShoppingBag, Check } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
@@ -10,12 +10,52 @@ interface ProductCardProps {
   price: string;
   salePrice?: string | null;
   id: string | number;
+  /** صور إضافية للمنتج (يتم التقليب بينها عند الـ hover/touch) */
+  extraImages?: string[];
 }
 
-export default function ProductCard({ title, description, imageUrl, price, salePrice, id }: ProductCardProps) {
+const CYCLE_INTERVAL = 1100; // المدة بين كل صورة (ms)
+
+export default function ProductCard({ title, description, imageUrl, price, salePrice, id, extraImages = [] }: ProductCardProps) {
   const { addToCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
+  const cycleRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // كل الصور (الصورة الرئيسية + الإضافية)
+  const allImages = [imageUrl, ...extraImages].filter(Boolean);
+  const hasMultiple = allImages.length > 1;
+
+  // التقليب التلقائي عند الـ hover/touch
+  useEffect(() => {
+    // تنظيف أي interval سابق
+    if (cycleRef.current) {
+      clearInterval(cycleRef.current);
+      cycleRef.current = null;
+    }
+
+    if (isHovered && hasMultiple) {
+      // ابدأ من الصورة الثانية (لأن الأولى معروضة بالفعل)
+      setImageIndex(0);
+      let idx = 0;
+      cycleRef.current = setInterval(() => {
+        idx = (idx + 1) % allImages.length;
+        setImageIndex(idx);
+      }, CYCLE_INTERVAL);
+    } else {
+      // ارجع للصورة الرئيسية
+      setImageIndex(0);
+    }
+
+    return () => {
+      if (cycleRef.current) {
+        clearInterval(cycleRef.current);
+        cycleRef.current = null;
+      }
+    };
+  }, [isHovered, hasMultiple, allImages.length]);
 
   const handleContactClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -44,15 +84,42 @@ export default function ProductCard({ title, description, imageUrl, price, saleP
     <div
       className="group card-premium flex flex-col bg-white rounded-2xl overflow-hidden"
       dir="rtl"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={() => setIsHovered(true)}
+      onTouchEnd={() => setIsHovered(false)}
     >
-      {/* الصورة */}
-      <Link to={`/product/${id}`} className="relative block aspect-[3/4] w-full overflow-hidden bg-gray-50">
-        <img
-          src={imageUrl}
-          alt={title}
-          className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      {/* منطقة الصور */}
+      <Link
+        to={`/product/${id}`}
+        className="relative block aspect-[3/4] w-full overflow-hidden bg-gray-50"
+        onClick={(e) => {
+          // على الموبايل: نقرة واحدة تفتح المنتج، نقرة مطولة تعرض التقليب
+          if (window.matchMedia('(hover: none)').matches && isHovered) {
+            // نترك السلوك الافتراضي للرابط
+          }
+        }}
+      >
+        {/* كل الصور فوق بعض — نظهر النشطة فقط */}
+        {allImages.map((src, idx) => (
+          <img
+            key={`${src}-${idx}`}
+            src={src}
+            alt={title}
+            className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-out ${
+              idx === imageIndex
+                ? 'opacity-100 scale-100 group-hover:scale-110'
+                : 'opacity-0 scale-105'
+            }`}
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.style.display = 'none';
+            }}
+          />
+        ))}
+
+        {/* تدرج علوي خفيف عند hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
         {/* بادج الخصم */}
         {salePrice && (
@@ -62,6 +129,22 @@ export default function ProductCard({ title, description, imageUrl, price, saleP
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
             </span>
             خصم {discount}%
+          </div>
+        )}
+
+        {/* مؤشر الصور (يظهر فقط لو في صور متعددة وعند الـ hover) */}
+        {hasMultiple && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            {allImages.map((_, idx) => (
+              <span
+                key={idx}
+                className={`block rounded-full transition-all duration-500 ${
+                  idx === imageIndex
+                    ? 'bg-white w-5 h-1.5 shadow-md'
+                    : 'bg-white/50 w-1.5 h-1.5'
+                }`}
+              />
+            ))}
           </div>
         )}
       </Link>

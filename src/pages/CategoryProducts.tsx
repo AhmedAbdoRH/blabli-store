@@ -26,7 +26,7 @@ export default function CategoryProducts() {
       setCategory(categoryData);
 
       const { data: servicesData, error: servicesError } = await supabase
-        .from('services').select('*').eq('category_id', categoryId);
+        .from('services').select(`*, product_images(image_url)`).eq('category_id', categoryId);
       if (servicesError) throw servicesError;
       setServices(servicesData || []);
     } catch (err: any) {
@@ -93,6 +93,7 @@ export default function CategoryProducts() {
                 imageUrl={service.image_url || ''}
                 price={service.price || ''}
                 salePrice={service.sale_price || null}
+                extraImages={(service as any).product_images?.map((img: any) => img.image_url).filter(Boolean) || []}
               />
             ))}
           </div>

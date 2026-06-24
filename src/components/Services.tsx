@@ -35,7 +35,7 @@ export default function Services() {
       setError(null);
       const { data, error } = await supabase
         .from('services')
-        .select(`*, category:categories(*)`)
+        .select(`*, category:categories(*), product_images(image_url)`)
         .order('created_at', { ascending: false });
       if (error) throw error;
       setServices(data || []);
@@ -194,6 +194,7 @@ export default function Services() {
                     imageUrl={service.image_url || ''}
                     price={service.price || ''}
                     salePrice={service.sale_price || null}
+                    extraImages={(service as any).product_images?.map((img: any) => img.image_url).filter(Boolean) || []}
                   />
                 </motion.div>
               ))

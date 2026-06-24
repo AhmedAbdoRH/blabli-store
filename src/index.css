@@ -1,37 +1,153 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ====== الهوية اللونية الجديدة ====== */
 :root {
-  --color-primary: #300000;    /* أسود حالك */
-  --color-secondary: #ffffff;  /* أبيض نقي */
-  --color-accent: #d99323;     /* ذهبي لامع */
-  --color-accent-light: #e0a745; /* ذهبي أفتح */
-  --background-color: #000000;
+  --color-primary: #1d1d1d;      /* أسود فاخر */
+  --color-secondary: #ffffff;    /* أبيض نقي */
+  --color-accent: #0f487d;       /* أزرق ملكي */
+  --color-accent-light: #1a6bb0; /* أزرق أفتح */
+  --color-accent-deep: #0a3258;  /* أزرق غامق */
+  --background-color: #ffffff;
   --background-gradient: none;
   --font-family: 'Cairo', sans-serif;
 }
 
 html {
   direction: rtl;
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-family, 'Cairo', sans-serif);
-  background-color: var(--background-color, #000000);
-  color: var(--color-secondary, #ffffff);
-  /* دعم التدرج اللوني للخلفية */
+  background-color: var(--background-color, #ffffff);
+  color: var(--color-primary, #1d1d1d);
   background-image: var(--background-gradient, none);
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* ====== أدوات تصميم فاخرة ====== */
 .glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(15, 72, 125, 0.1);
+}
+
+.glass-dark {
+  background: rgba(29, 29, 29, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* تدرج النص الأزرق الفاخر */
+.text-gradient-brand {
+  background: linear-gradient(135deg, #0f487d 0%, #1a6bb0 50%, #0a3258 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* تأثير اللمعان (Shimmer) للعناصر الفاخرة */
+.shimmer-bg {
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    rgba(15, 72, 125, 0.08) 50%,
+    transparent 65%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+}
+
+/* بطاقة بظل ناعم وحدود أنيقة */
+.card-premium {
+  background: #ffffff;
+  border: 1px solid rgba(29, 29, 29, 0.06);
+  box-shadow: 0 4px 24px -8px rgba(29, 29, 29, 0.08);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-premium:hover {
+  box-shadow: 0 20px 50px -12px rgba(15, 72, 125, 0.25);
+  transform: translateY(-6px);
+  border-color: rgba(15, 72, 125, 0.2);
+}
+
+/* زر أساسي بتأثير لمعان */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.7s ease;
+}
+.btn-shine:hover::after {
+  left: 130%;
+}
+
+/* أخفاف scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0f487d, #0a3258);
+  border-radius: 10px;
+  border: 2px solid #f1f5f9;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0a3258;
+}
+
+/* إخفاء scrollbar */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* أنيميشن ظهور العناصر عند Scroll */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* خط فاصل متدرج أنيق */
+.divider-gradient {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(15, 72, 125, 0.3), transparent);
+}
+
+/* تحسين الصور */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
 }

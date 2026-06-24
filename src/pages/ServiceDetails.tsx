@@ -208,7 +208,7 @@ export default function ProductDetails() {
                   </button>
                 </div>
 
-                <div className="text-3xl font-black text-red-600 mb-8 tracking-tight">
+                <div className="text-3xl font-black text-brand mb-8 tracking-tight">
                   {service.price} ج.م
                 </div>
 
@@ -225,9 +225,9 @@ export default function ProductDetails() {
                     onClick={handleAddToCart}
                     disabled={isAdding || isAdded}
                     className={`w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl font-bold transition-all duration-300 ${
-                      isAdded 
-                        ? 'bg-green-500 text-white' 
-                        : 'bg-gray-900 text-white hover:bg-gray-800 hover:shadow-xl hover:shadow-gray-900/20'
+                      isAdded
+                        ? 'bg-green-500 text-white'
+                        : 'bg-brand text-white hover:bg-brand-deep hover:shadow-xl hover:shadow-brand/30'
                     }`}
                   >
                     {isAdding ? (
@@ -247,7 +247,7 @@ export default function ProductDetails() {
 
                   <button
                     onClick={handleContact}
-                    className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl font-bold text-gray-900 bg-white border-2 border-gray-200 hover:border-gray-900 hover:bg-gray-50 transition-all duration-300"
+                    className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl font-bold text-ink bg-white border-2 border-gray-200 hover:border-brand hover:text-brand hover:bg-brand-50 transition-all duration-300"
                   >
                     <MessageCircle className="h-5 w-5 text-green-500" />
                     <span>استفسر أو اطلب عبر الواتساب</span>
@@ -284,7 +284,7 @@ export default function ProductDetails() {
                         className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
                       />
                     </div>
-                    <h3 className="text-sm font-bold text-gray-900 truncate mb-1 group-hover:text-red-600 transition-colors">
+                    <h3 className="text-sm font-bold text-gray-900 truncate mb-1 group-hover:text-brand transition-colors">
                       {item.title}
                     </h3>
                     <div className="text-sm font-black text-gray-600">

@@ -190,7 +190,7 @@ const Cart: React.FC = () => {
                           e.stopPropagation();
                           removeFromCart(item.id);
                         }}
-                        className="text-red-500 hover:text-red-700 p-2"
+                        className="text-gray-400 hover:text-brand p-2 transition-colors"
                         aria-label="إزالة المنتج"
                       >
                         <Trash2 className="w-5 h-5" />
@@ -223,7 +223,7 @@ const Cart: React.FC = () => {
                     // Close cart after checkout
                     toggleCart(false);
                   }}
-                  className="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition-colors"
+                  className="w-full bg-brand text-white py-3 rounded-xl hover:bg-brand-deep transition-colors shadow-brand font-bold"
                 >
                   إتمام الطلب
                 </button>

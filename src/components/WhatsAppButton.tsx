@@ -29,7 +29,7 @@ export default function WhatsAppButton() {
       {/* Main Button */}
       <motion.button
         onClick={toggleMenu}
-        className="fixed bottom-6 left-6 pl-4 pr-5 py-3 shadow-2xl transition-all text-white bg-[#0f172a] hover:bg-black z-50 group border-l-4 border-[#c1121f]"
+        className="btn-shine fixed bottom-6 left-6 pl-4 pr-5 py-3 shadow-brand-lg transition-all text-white bg-brand hover:bg-brand-deep z-50 group border-l-4 border-brand-300"
         whileHover={{ scale: 1.03, x: 2 }}
         whileTap={{ scale: 0.98 }}
         animate={{
@@ -40,8 +40,8 @@ export default function WhatsAppButton() {
       >
         <div className="flex items-center gap-3">
           <div className="relative">
-            <MessageCircle className="h-5 w-5 text-[#c1121f]" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#c1121f] animate-pulse"></span>
+            <MessageCircle className="h-5 w-5 text-white" />
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-white animate-pulse rounded-full"></span>
           </div>
           <span className="text-sm font-bold tracking-wide">تواصل معنا</span>
         </div>

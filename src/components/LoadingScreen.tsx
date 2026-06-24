@@ -80,61 +80,53 @@ export default function LoadingScreen({
   return (
     <div
       dir="rtl"
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#FAFAFA] transition-all duration-700 ease-in-out ${
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white transition-all duration-700 ease-in-out ${
         fadeOut ? 'opacity-0 scale-105 pointer-events-none' : 'opacity-100 scale-100'
       }`}
     >
-      <div className="flex flex-col items-center w-full max-w-sm px-6">
-        
-        {/* منطقة اللوجو أو أيقونة التي شيرت */}
+      {/* زخرفة خلفية */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-brand-50 rounded-full blur-3xl opacity-70"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-100/40 rounded-full blur-3xl opacity-60"></div>
+
+      <div className="flex flex-col items-center w-full max-w-sm px-6 relative z-10">
+
+        {/* منطقة اللوجو */}
         <div className="h-32 flex items-center justify-center mb-8">
           {imageLoaded && !imageError && logoUrl ? (
-            // تأثير ظهور اللوجو (Blur Reveal)
             <img
-              src={logoUrl?.includes('supabase.co') ? '/favicon.png' : (logoUrl || '/favicon.png')}
+              src={logoUrl?.includes('supabase.co') ? '/logo.jpeg' : (logoUrl || '/logo.jpeg')}
               alt="Loading Logo"
-              className="w-32 h-32 sm:w-40 sm:h-40 object-contain fashion-logo-reveal"
+              className="w-32 h-32 sm:w-40 sm:h-40 object-contain fashion-logo-reveal rounded-2xl shadow-soft-lg"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                if (target.src !== '/favicon.png') target.src = '/favicon.png';
+                if (target.src !== '/logo.jpeg') target.src = '/logo.jpeg';
               }}
             />
           ) : (
-            // البديل: أيقونة تي شيرت ترسم نفسها وتتحرك
             <div className="tshirt-container">
-              <svg 
-                className="w-16 h-16 text-gray-900 tshirt-svg" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="1.5" 
-                strokeLinecap="round" 
+              <svg
+                className="w-16 h-16 text-brand tshirt-svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                {/* ياقة التي شيرت (Collar) */}
-                <path 
-                  d="M8 4.5 C 8 7.5 16 7.5 16 4.5" 
-                  className="tshirt-neck" 
-                />
-                {/* الأكمام والجسم (Body & Sleeves) */}
-                <path 
-                  d="M8 4.5 L 3 6.5 L 4.5 11 L 7 9.5 V 21 H 17 V 9.5 L 19.5 11 L 21 6.5 L 16 4.5" 
-                  className="tshirt-body" 
-                />
+                <path d="M8 4.5 C 8 7.5 16 7.5 16 4.5" className="tshirt-neck" />
+                <path d="M8 4.5 L 3 6.5 L 4.5 11 L 7 9.5 V 21 H 17 V 9.5 L 19.5 11 L 21 6.5 L 16 4.5" className="tshirt-body" />
               </svg>
             </div>
           )}
         </div>
 
-        {/* العبارات المتغيرة (Text Rotation) */}
+        {/* العبارات المتغيرة */}
         <div className="h-6 relative w-full flex justify-center overflow-hidden mb-6">
           {loadingPhrases.map((phrase, idx) => (
             <span
               key={idx}
-              className={`absolute text-sm font-bold tracking-wide text-gray-800 transition-all duration-500 ease-in-out ${
-                idx === phraseIndex 
-                  ? 'opacity-100 transform translate-y-0' 
-                  : 'opacity-0 transform translate-y-4'
+              className={`absolute text-sm font-bold tracking-wide text-ink transition-all duration-500 ease-in-out ${
+                idx === phraseIndex ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-4'
               }`}
             >
               {phrase}
@@ -142,9 +134,9 @@ export default function LoadingScreen({
           ))}
         </div>
 
-        {/* شريط التحميل الأنيق (Minimalist Progress Bar) */}
-        <div className="w-48 h-[2px] bg-gray-200 overflow-hidden rounded-full">
-          <div className="h-full bg-gray-900 progress-bar-fill"></div>
+        {/* شريط التحميل الأزرق */}
+        <div className="w-48 h-[3px] bg-gray-200 overflow-hidden rounded-full">
+          <div className="h-full bg-gradient-to-r from-brand to-brand-300 progress-bar-fill rounded-full"></div>
         </div>
       </div>
 

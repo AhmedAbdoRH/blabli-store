@@ -77,10 +77,9 @@ export default function Testimonials() {
 
   if (loading) {
     return (
-      <div className="relative py-12 px-4 md:px-0 border-t border-gray-700/30 overflow-hidden">
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-md -z-10"></div>
-        <div className="text-center text-white py-8 backdrop-blur-xl bg-white/10 max-w-4xl mx-auto rounded-xl p-8 border border-white/20">
-
+      <div className="relative py-16 px-4 md:px-0 overflow-hidden bg-gradient-to-br from-brand-deep via-brand to-brand-600">
+        <div className="max-w-4xl mx-auto relative z-10 text-center py-8 text-white/80">
+          جاري التحميل...
         </div>
       </div>
     );
@@ -88,11 +87,15 @@ export default function Testimonials() {
 
   if (totalTestimonials === 0) {
     return (
-      <section className="relative py-12 px-4 md:px-0 border-t border-gray-700/30 mt-16 overflow-hidden">
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-md -z-10"></div>
+      <section className="relative py-16 px-4 md:px-0 overflow-hidden bg-gradient-to-br from-brand-deep via-brand to-brand-600">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent_60%)]"></div>
         <div className="max-w-4xl mx-auto relative z-10">
-          <h2 className="text-3xl font-bold text-center text-white mb-10 drop-shadow-lg">آراء عملائنا</h2>
-          <div className="text-center text-gray-200 backdrop-blur-xl bg-white/10 rounded-xl shadow-2xl p-8 border border-white/20">
+          <h2 className="text-3xl md:text-4xl font-black text-center text-white mb-3 drop-shadow-lg">آراء عملائنا</h2>
+          <div className="flex items-center justify-center gap-2 mb-10">
+            <span className="w-12 h-1 bg-white/60 rounded-full"></span>
+            <span className="w-2 h-1 bg-white/60 rounded-full"></span>
+          </div>
+          <div className="text-center text-white/70 bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-white/20">
             لا توجد صور آراء لعرضها حالياً.
           </div>
         </div>
@@ -101,9 +104,18 @@ export default function Testimonials() {
   }
 
   return (
-    <section className="bg-black/70 py-12 px-4 md:px-0 border-t border-gray-700 mt-16 overflow-x-hidden"> {/* overflow-x-hidden is important */}
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white mb-10">آراء عملائنا</h2>
+    <section className="relative py-16 px-4 md:px-0 overflow-hidden bg-gradient-to-br from-brand-deep via-brand to-brand-600">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.12),transparent_60%)]"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+      <div className="max-w-4xl mx-auto relative z-10">
+        <div className="text-center mb-10">
+          <span className="inline-block text-brand-200 font-bold text-sm tracking-wider uppercase mb-3">شهادات</span>
+          <h2 className="text-3xl md:text-4xl font-black text-center text-white drop-shadow-lg">آراء عملائنا</h2>
+          <div className="flex items-center justify-center gap-2 mt-3">
+            <span className="w-12 h-1 bg-white/60 rounded-full"></span>
+            <span className="w-2 h-1 bg-white/60 rounded-full"></span>
+          </div>
+        </div>
 
         <div className="relative h-[400px] md:h-[500px] w-full"> {/* Fixed height container for cards */}
           {/* Testimonial Cards */}
@@ -179,7 +191,7 @@ export default function Testimonials() {
           <div className="flex justify-center items-center mt-8 space-x-4 rtl:space-x-reverse">
             <button
               onClick={prevTestimonial}
-              className="bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 focus:outline-none disabled:opacity-50"
+              className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 focus:outline-none disabled:opacity-50"
               aria-label="التعليق السابق"
               disabled={isAnimating}
             >
@@ -193,8 +205,8 @@ export default function Testimonials() {
                   key={index}
                   onClick={() => goToTestimonial(index)}
                   disabled={isAnimating}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentIndex ? 'bg-white w-6' : 'bg-white/30 hover:bg-white/50'
+                  className={`h-2.5 rounded-full transition-all duration-300 ${
+                    index === currentIndex ? 'bg-white w-8' : 'bg-white/40 hover:bg-white/60 w-2.5'
                   } disabled:opacity-50`}
                   aria-label={`انتقل إلى التعليق ${index + 1}`}
                 />
@@ -203,7 +215,7 @@ export default function Testimonials() {
 
             <button
               onClick={nextTestimonial}
-              className="bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 focus:outline-none disabled:opacity-50"
+              className="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white p-3 rounded-full transition-all duration-300 transform hover:scale-110 focus:outline-none disabled:opacity-50"
               aria-label="التعليق التالي"
               disabled={isAnimating}
             >

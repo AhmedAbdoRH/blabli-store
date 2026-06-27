@@ -75,11 +75,6 @@ export default function ProductCard({ title, description, imageUrl, price, saleP
     }, 600);
   };
 
-  // حساب نسبة الخصم
-  const discount = salePrice && price
-    ? Math.round((1 - parseFloat(salePrice) / parseFloat(price)) * 100)
-    : 0;
-
   return (
     <div
       className="group card-premium flex flex-col bg-white rounded-2xl overflow-hidden"
@@ -120,17 +115,6 @@ export default function ProductCard({ title, description, imageUrl, price, saleP
 
         {/* تدرج علوي خفيف عند hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-ink/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-        {/* بادج الخصم */}
-        {salePrice && (
-          <div className="absolute top-3 right-3 bg-brand text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-brand z-10 flex items-center gap-1.5">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
-            </span>
-            خصم {discount}%
-          </div>
-        )}
 
         {/* مؤشر الصور (يظهر فقط لو في صور متعددة وعند الـ hover) */}
         {hasMultiple && (

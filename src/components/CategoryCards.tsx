@@ -54,7 +54,6 @@ export default function CategoryCards() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <span className="inline-block text-brand font-bold text-sm tracking-wider uppercase mb-3">تصفح حسب القسم</span>
           <h2 className="text-3xl md:text-4xl font-black text-ink mb-3">أقسامنا المميزة</h2>
           <div className="flex items-center justify-center gap-2">
             <span className="w-12 h-1 bg-brand rounded-full"></span>

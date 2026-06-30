@@ -49,30 +49,53 @@ export default function About() {
 
       {/* الحصان - العنصر البصري الرئيسي في الخلفية */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* النسخة الرئيسية - الحصان كامل واضح في المنتصف */}
-        <img
-          src="/horse.png"
-          alt=""
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[800px] lg:w-[1000px] h-auto"
-          style={{
-            filter: 'invert(1) brightness(2.5)',
-            opacity: 0.12,
-            mixBlendMode: 'screen',
-          }}
-        />
-
-        {/* نسخة مكبرة - يمين الخلفية */}
-        <img
-          src="/horse.png"
-          alt=""
-          className="absolute -top-20 right-0 w-[500px] md:w-[650px] h-auto hidden md:block"
-          style={{
-            filter: 'invert(1) brightness(2.5)',
-            opacity: 0.18,
-            transform: 'scaleX(-1)',
-            mixBlendMode: 'screen',
-          }}
-        />
+        <style>{`
+          @keyframes horse-x {
+            0%   { transform: translate(calc(-50% - 200px), 0) scale(1);     opacity: 0.08; }
+            25%  { transform: translate(calc(-50% - 100px), 0) scale(1.04);  opacity: 0.14; }
+            50%  { transform: translate(calc(-50% + 200px), 0) scale(1.08);  opacity: 0.20; }
+            75%  { transform: translate(calc(-50% + 100px), 0) scale(1.04);  opacity: 0.14; }
+            100% { transform: translate(calc(-50% - 200px), 0) scale(1);     opacity: 0.08; }
+          }
+          @keyframes horse-y {
+            0%   { transform: translate(-50%, calc(-50% - 20px)); }
+            50%  { transform: translate(-50%, calc(-50% + 20px)); }
+            100% { transform: translate(-50%, calc(-50% - 20px)); }
+          }
+          .horse-wrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            will-change: transform;
+            animation: horse-y 120s linear infinite;
+          }
+          .horse-main {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            filter: invert(1) brightness(2.5);
+            mix-blend-mode: screen;
+            width: clamp(600px, 80vw, 1000px);
+            height: auto;
+            will-change: transform, opacity;
+            animation: horse-x 90s linear infinite;
+          }
+          @media (max-width: 768px) {
+            .horse-main {
+              width: 600px;
+            }
+          }
+        `}</style>
+        <div className="horse-wrap">
+          <img
+            src="/horse.png"
+            alt=""
+            className="horse-main"
+          />
+        </div>
       </div>
 
       <div className="container mx-auto px-8 relative z-10">

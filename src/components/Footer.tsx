@@ -26,9 +26,6 @@ export default function Footer({ storeSettings }: FooterProps) {
           {/* العمود الأول: من نحن */}
           <div className="md:col-span-1">
             <img src="/logo.jpeg" alt="blabli" className="h-14 w-auto mb-5 rounded-lg" />
-            <p className="text-gray-300 text-sm leading-relaxed mb-5">
-              بخبرة تمتد لأكثر من 20 عاماً في سوق الزي الموحد، نفخر بكوننا الشريك الاستراتيجي لأكبر الشركات. نحن لا نصنع مجرد ملابس، بل نصمم هوية بصرية تعكس تفوق وثقة فريق عملكم.
-            </p>
             {socialLinks.length > 0 && (
               <div className="flex gap-3">
                 {socialLinks.map((link, index) => (

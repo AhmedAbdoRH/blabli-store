@@ -1,12 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, Sparkles, Award, ArrowLeft, Sword, Target, Crown, Quote } from 'lucide-react';
-
-const traits = [
-  { icon: Sword, label: 'الشجاعة' },
-  { icon: Shield, label: 'الثبات' },
-  { icon: Target, label: 'الطموح' },
-  { icon: Crown, label: 'القيادة' },
-];
+import { Shield, Sparkles, Award, ArrowLeft, Quote } from 'lucide-react';
 
 const highlights = [
   { icon: Sparkles, title: 'خامات فاخرة', desc: 'أجود أنواع الأقمشة' },
@@ -140,8 +133,10 @@ export default function About() {
 
             {/* الوصف */}
             <p className="text-lg md:text-xl text-white/60 leading-[2] max-w-2xl mb-8 font-light">
-              <span className="text-brand-300 font-bold">Blabli</span> ليس مجرد اسم — بل هو تعبير عن
-              الرجل الذي يصنع هويته بنفسه. رجل يسعى للنجاح، يؤمن بالقوة والانضباط، ويعتبر الأناقة امتدادًا لشخصيته.
+              ليس مجرد اسم، بل هو تعبير عن الرجل الذي يصنع
+              <span className="text-brand-300 font-bold"> Blabli</span> هويته بنفسه.
+              <br />
+              في عالم مليء بالتشابه، وُلدت <span className="text-brand-300 font-bold">Blabli</span> للرجل الذي يرفض أن يكون نسخة من الآخرين.
             </p>
 
             {/* الاقتباس */}
@@ -160,20 +155,29 @@ export default function About() {
               </p>
             </motion.div>
 
-            {/* الشارات */}
-            <div className="flex flex-wrap gap-3 mb-12">
-              {traits.map((trait, i) => (
+            {/* أيقونات الجودة */}
+            <div className="flex flex-wrap items-center gap-6 mb-12">
+              {[
+                { src: '/recycle.png', alt: 'Recycle', label: 'Recycle', invert: true },
+                { src: '/Egyptian-Cotton-Original-Logo-Black.png', alt: 'Egyptian Cotton', label: 'Egyptian Cotton', invert: false },
+              ].map((badge, i) => (
                 <motion.div
-                  key={trait.label}
+                  key={badge.label}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.6 + i * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ y: -4, borderColor: 'rgba(255,255,255,0.3)', boxShadow: '0 10px 30px -10px rgba(255,255,255,0.1)' }}
-                  className="inline-flex items-center gap-2.5 px-5 py-3 bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl text-white/80 text-sm font-semibold transition-all duration-300 cursor-default"
+                  className="inline-flex items-center gap-3 px-5 py-3 bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl transition-all duration-300 cursor-default"
                 >
-                  <trait.icon className="w-4 h-4 text-brand-300" strokeWidth={2} />
-                  <span>{trait.label}</span>
+                  <div className="w-10 h-10 rounded-full bg-brand border border-brand-300/50 flex items-center justify-center p-1.5">
+                    <img
+                      src={badge.src}
+                      alt={badge.alt}
+                      className={`w-full h-full object-contain ${badge.invert ? 'invert brightness-0' : ''}`}
+                    />
+                  </div>
+                  <span className="text-brand-300 text-sm font-bold tracking-wide">{badge.label}</span>
                 </motion.div>
               ))}
             </div>

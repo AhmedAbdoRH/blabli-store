@@ -79,7 +79,7 @@ export default function BrandStory() {
             </h3>
 
             <p className="text-gray-700 text-lg leading-relaxed mb-5">
-              رجل يسعى للنجاح، يؤمن بالقوة والانضباط، ويعتبر الأناقة امتدادًا لشخصيته.
+              رجل يسعى للنجاح.
             </p>
 
             <p className="text-gray-700 text-lg leading-relaxed mb-5">

@@ -73,7 +73,9 @@ export default function ProductDetails() {
   const handleAddToCart = () => {
     if (!service) return;
     setIsAdding(true);
-    addToCart({ id: service.id, title: service.title, price: service.price, imageUrl: service.image_url || '' });
+    // Prefer sale price when available (same as product cards)
+    const cartPrice = service.sale_price || service.price || '';
+    addToCart({ id: service.id, title: service.title, price: cartPrice, imageUrl: service.image_url || '' });
     setIsAdded(true);
     setTimeout(() => {
       setIsAdding(false);
@@ -249,9 +251,13 @@ export default function ProductDetails() {
                   </div>
 
                   <div className="flex items-baseline gap-3 mb-8">
-                    <span className="text-3xl lg:text-4xl font-black text-brand tracking-tight">{service.price} ج.م</span>
-                    {service.sale_price && (
-                      <span className="text-lg font-medium text-gray-400 line-through decoration-gray-300">{service.sale_price}</span>
+                    {service.sale_price ? (
+                      <>
+                        <span className="text-3xl lg:text-4xl font-black text-brand tracking-tight">{service.sale_price} ج.م</span>
+                        <span className="text-lg font-medium text-gray-400 line-through decoration-gray-300">{service.price} ج.م</span>
+                      </>
+                    ) : (
+                      <span className="text-3xl lg:text-4xl font-black text-brand tracking-tight">{service.price} ج.م</span>
                     )}
                     <div className="divider-gradient flex-1 mx-2"></div>
                   </div>
@@ -354,7 +360,16 @@ export default function ProductDetails() {
                       <div className="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                     <h3 className="text-sm font-bold text-ink truncate mb-1 group-hover:text-brand transition-colors">{item.title}</h3>
-                    <div className="text-sm font-black text-brand">{item.price} ج.م</div>
+                    <div className="flex items-baseline gap-2 text-sm">
+                      {item.sale_price ? (
+                        <>
+                          <span className="font-black text-brand">{item.sale_price} ج.م</span>
+                          <span className="text-gray-400 line-through text-xs">{item.price} ج.م</span>
+                        </>
+                      ) : (
+                        <span className="font-black text-brand">{item.price} ج.م</span>
+                      )}
+                    </div>
                   </div>
                 );
               })}

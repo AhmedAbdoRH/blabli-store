@@ -143,7 +143,7 @@ export default function ProductCard({ title, description, imageUrl, price, saleP
             {salePrice ? (
               <>
                 <span className="font-black text-brand text-lg tracking-tight">{salePrice} ج.م</span>
-                <span className="text-sm font-medium text-gray-400 line-through decoration-gray-300">{price}</span>
+                <span className="text-sm font-medium text-gray-400 line-through decoration-gray-300">{price} ج.م</span>
               </>
             ) : (
               <span className="font-black text-ink text-lg tracking-tight">{price} ج.م</span>

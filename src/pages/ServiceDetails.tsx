@@ -77,10 +77,12 @@ export default function ProductDetails() {
   const handleAddToCart = () => {
     if (!service) return;
     setIsAdding(true);
+    // Prefer sale price when available (same as product cards)
+    const cartPrice = service.sale_price || service.price || '';
     addToCart({
       id: service.id,
       title: service.title,
-      price: service.price,
+      price: cartPrice,
       imageUrl: service.image_url || '',
     });
     setIsAdded(true);
@@ -208,8 +210,15 @@ export default function ProductDetails() {
                   </button>
                 </div>
 
-                <div className="text-3xl font-black text-brand mb-8 tracking-tight">
-                  {service.price} ج.م
+                <div className="flex items-baseline gap-3 mb-8">
+                  {service.sale_price ? (
+                    <>
+                      <span className="text-3xl font-black text-brand tracking-tight">{service.sale_price} ج.م</span>
+                      <span className="text-lg font-medium text-gray-400 line-through decoration-gray-300">{service.price} ج.م</span>
+                    </>
+                  ) : (
+                    <span className="text-3xl font-black text-brand tracking-tight">{service.price} ج.م</span>
+                  )}
                 </div>
 
                 <div className="prose prose-gray max-w-none mb-10">

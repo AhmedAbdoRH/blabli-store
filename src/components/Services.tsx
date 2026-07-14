@@ -7,11 +7,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | 'featured' | 'best_sellers' | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [hasFeaturedProducts, setHasFeaturedProducts] = useState(false);
-  const [hasBestSellerProducts, setHasBestSellerProducts] = useState(false);
   const [visibleCount, setVisibleCount] = useState(20);
 
   useEffect(() => {
@@ -39,10 +37,6 @@ export default function Services() {
         .order('created_at', { ascending: false });
       if (error) throw error;
       setServices(data || []);
-      const hasFeatured = data?.some((service: any) => service.is_featured) || false;
-      const hasBestSellers = data?.some((service: any) => service.is_best_seller) || false;
-      setHasFeaturedProducts(hasFeatured);
-      setHasBestSellerProducts(hasBestSellers);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -52,8 +46,6 @@ export default function Services() {
 
   const filteredServices = useCallback((): Service[] => {
     if (!selectedCategory) return services;
-    if (selectedCategory === 'featured') return services.filter((s) => s.is_featured === true);
-    if (selectedCategory === 'best_sellers') return services.filter((s) => s.is_best_seller === true);
     return services.filter((s) => s.category_id === selectedCategory);
   }, [selectedCategory, services]);
 
@@ -108,10 +100,7 @@ export default function Services() {
         className="container mx-auto px-4"
         initial="hidden"
         animate="visible"
-        variants={{
-          hidden: { opacity: 0, y: 20 },
-          visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
-        }}
+        variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } }}}
       >
         {/* عنوان القسم */}
         <div className="text-center mb-12">
@@ -126,29 +115,13 @@ export default function Services() {
         {/* أزرار الفلترة */}
         <motion.div
           className="flex flex-wrap gap-2.5 justify-center mb-12"
-          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.05 } } }}
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.05 } }}}
         >
           <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
             <FilterButton active={!selectedCategory} onClick={() => setSelectedCategory(null)}>
               جميع المنتجات
             </FilterButton>
           </motion.div>
-
-          {hasFeaturedProducts && (
-            <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
-              <FilterButton active={selectedCategory === 'featured'} onClick={() => setSelectedCategory('featured')}>
-                أحدث العروض
-              </FilterButton>
-            </motion.div>
-          )}
-
-          {hasBestSellerProducts && (
-            <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}>
-              <FilterButton active={selectedCategory === 'best_sellers'} onClick={() => setSelectedCategory('best_sellers')}>
-                الأكثر مبيعاً
-              </FilterButton>
-            </motion.div>
-          )}
 
           <AnimatePresence>
             {categories.map((category) => (
@@ -173,7 +146,7 @@ export default function Services() {
         {/* شبكة المنتجات */}
         <motion.div
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
-          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.05 } } }}
+          variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.05 } }}}
         >
           <AnimatePresence mode="wait">
             {visibleServices.length > 0 ? (

@@ -1,62 +1,57 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Download, Share, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
-}
+import {
+  clearDeferredInstallPrompt,
+  getDeferredInstallPrompt,
+  isIosDevice,
+  isStandaloneMode,
+  onInstallPromptReady,
+  triggerPwaInstall,
+} from '../lib/pwaInstall';
 
 const STORAGE_KEY = 'blabli-pwa-install-dismissed';
-const SHOW_DELAY_MS = 2500;
-
-function isIos(): boolean {
-  if (typeof window === 'undefined') return false;
-  return /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-}
-
-function isStandalone(): boolean {
-  if (typeof window === 'undefined') return false;
-  const nav = window.navigator as Navigator & { standalone?: boolean };
-  return window.matchMedia('(display-mode: standalone)').matches || nav.standalone === true;
-}
+const SHOW_DELAY_MS = 2000;
 
 export default function InstallPWA() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [canInstall, setCanInstall] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [isIosDevice, setIsIosDevice] = useState(false);
+  const [isIos, setIsIos] = useState(false);
   const [installing, setInstalling] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+
+  const refreshCanInstall = useCallback(() => {
+    setCanInstall(!!getDeferredInstallPrompt());
+  }, []);
 
   useEffect(() => {
-    if (isStandalone()) return;
+    if (isStandaloneMode()) return;
 
     try {
       if (localStorage.getItem(STORAGE_KEY) === '1') return;
     } catch {
-      // ignore storage errors
+      // ignore
     }
 
-    const ios = isIos();
-    setIsIosDevice(ios);
+    setIsIos(isIosDevice());
+    refreshCanInstall();
 
-    const onBeforeInstall = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      // Show as soon as the browser is ready to install
+    const unsub = onInstallPromptReady(() => {
+      refreshCanInstall();
       setVisible(true);
-    };
+      setStatusMessage(null);
+    });
 
-    window.addEventListener('beforeinstallprompt', onBeforeInstall);
-
-    // First visit: show our invite after a short delay
-    // (iOS never fires beforeinstallprompt, so this is required)
+    // Show invite on first visit even before the browser is ready
     const timer = window.setTimeout(() => {
       setVisible(true);
+      refreshCanInstall();
     }, SHOW_DELAY_MS);
 
     const onInstalled = () => {
       setVisible(false);
-      setDeferredPrompt(null);
+      clearDeferredInstallPrompt();
+      setCanInstall(false);
       try {
         localStorage.setItem(STORAGE_KEY, '1');
       } catch {
@@ -68,13 +63,14 @@ export default function InstallPWA() {
 
     return () => {
       window.clearTimeout(timer);
-      window.removeEventListener('beforeinstallprompt', onBeforeInstall);
+      unsub();
       window.removeEventListener('appinstalled', onInstalled);
     };
-  }, []);
+  }, [refreshCanInstall]);
 
   const dismiss = () => {
     setVisible(false);
+    setStatusMessage(null);
     try {
       localStorage.setItem(STORAGE_KEY, '1');
     } catch {
@@ -83,21 +79,42 @@ export default function InstallPWA() {
   };
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return;
+    // Re-read from module store (more reliable than React state alone)
+    if (!getDeferredInstallPrompt()) {
+      setStatusMessage(
+        'المتصفح غير جاهز للتثبيت الآن. من Chrome: القائمة ⋮ ثم «تثبيت التطبيق» أو Install app.'
+      );
+      refreshCanInstall();
+      return;
+    }
+
     try {
       setInstalling(true);
-      await deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      dismiss();
-    } catch (err) {
-      console.error('PWA install failed:', err);
+      setStatusMessage(null);
+      const outcome = await triggerPwaInstall();
+
+      if (outcome === 'accepted') {
+        dismiss();
+        return;
+      }
+
+      if (outcome === 'dismissed') {
+        // User closed the native dialog — keep our banner closed too
+        dismiss();
+        return;
+      }
+
+      setStatusMessage(
+        'تعذر فتح نافذة التثبيت. جرّب من قائمة المتصفح: ⋮ ← تثبيت التطبيق / Install app'
+      );
+      setCanInstall(false);
     } finally {
       setInstalling(false);
-      setDeferredPrompt(null);
+      refreshCanInstall();
     }
   };
 
-  if (isStandalone()) return null;
+  if (isStandaloneMode()) return null;
 
   return (
     <AnimatePresence>
@@ -107,13 +124,13 @@ export default function InstallPWA() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-4 left-4 right-4 z-[100] mx-auto max-w-md"
+          className="fixed bottom-20 left-4 right-4 z-[110] mx-auto max-w-md sm:bottom-4"
           dir="rtl"
           role="dialog"
           aria-labelledby="pwa-install-title"
           aria-describedby="pwa-install-desc"
         >
-          <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/95 p-4 shadow-2xl backdrop-blur-xl">
+          <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white p-4 shadow-2xl">
             <button
               type="button"
               onClick={dismiss}
@@ -125,7 +142,7 @@ export default function InstallPWA() {
 
             <div className="flex items-start gap-3 pe-6">
               <img
-                src="/logo.jpeg"
+                src="/pwa-icon-192.png"
                 alt="blabli"
                 className="h-14 w-14 shrink-0 rounded-xl object-cover shadow-md"
               />
@@ -139,17 +156,19 @@ export default function InstallPWA() {
               </div>
             </div>
 
-            {isIosDevice ? (
+            {isIos ? (
               <div className="mt-4 rounded-xl bg-gray-50 px-3 py-3 text-sm text-gray-700">
-                <p className="mb-2 font-semibold text-ink">على آيفون / آيباد:</p>
+                <p className="mb-2 font-semibold text-ink">على آيفون / آيباد (Safari فقط):</p>
                 <ol className="list-decimal space-y-1.5 pe-5 text-gray-600">
                   <li className="flex flex-wrap items-center gap-1.5">
                     اضغط زر المشاركة
                     <Share className="inline h-4 w-4 shrink-0 text-brand" />
-                    في Safari
+                    أسفل الشاشة
                   </li>
                   <li>
-                    اختر <span className="font-bold text-ink">Add to Home Screen</span>
+                    مرّر واختر <span className="font-bold text-ink">Add to Home Screen</span>
+                    {' / '}
+                    <span className="font-bold text-ink">إضافة إلى الشاشة الرئيسية</span>
                   </li>
                   <li>
                     ثم اضغط <span className="font-bold text-ink">Add</span>
@@ -172,38 +191,35 @@ export default function InstallPWA() {
                 >
                   لاحقاً
                 </button>
-                {deferredPrompt ? (
-                  <button
-                    type="button"
-                    onClick={handleInstall}
-                    disabled={installing}
-                    className="btn-shine flex flex-[1.4] items-center justify-center gap-2 rounded-xl bg-brand py-2.5 text-sm font-bold text-white shadow-brand transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {installing ? (
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                    ) : (
-                      <>
-                        <Download className="h-4 w-4" />
-                        <span>تثبيت التطبيق</span>
-                      </>
-                    )}
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={dismiss}
-                    className="btn-shine flex flex-[1.4] items-center justify-center gap-2 rounded-xl bg-brand py-2.5 text-sm font-bold text-white shadow-brand transition-colors hover:bg-brand-deep"
-                  >
-                    <Download className="h-4 w-4" />
-                    <span>حسناً</span>
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={handleInstall}
+                  disabled={installing}
+                  className="btn-shine flex flex-[1.4] items-center justify-center gap-2 rounded-xl bg-brand py-2.5 text-sm font-bold text-white shadow-brand transition-colors hover:bg-brand-deep disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {installing ? (
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                  ) : (
+                    <>
+                      <Download className="h-4 w-4" />
+                      <span>تثبيت التطبيق</span>
+                    </>
+                  )}
+                </button>
               </div>
             )}
 
-            {!isIosDevice && !deferredPrompt && (
-              <p className="mt-3 text-center text-xs text-gray-500">
-                من متصفح Chrome: القائمة ⋮ ← تثبيت التطبيق / Install app
+            {statusMessage && (
+              <p className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-center text-xs leading-relaxed text-amber-800">
+                {statusMessage}
+              </p>
+            )}
+
+            {!isIos && !canInstall && !statusMessage && (
+              <p className="mt-3 text-center text-xs leading-relaxed text-gray-500">
+                إذا لم تفتح نافذة التثبيت: من Chrome اضغط ⋮ ثم «تثبيت التطبيق» أو Install app.
+                <br />
+                يجب فتح الموقع عبر HTTPS (النسخة المنشورة).
               </p>
             )}
           </div>

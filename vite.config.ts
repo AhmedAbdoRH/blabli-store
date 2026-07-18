@@ -7,7 +7,14 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['logo.jpeg', 'logo.png', 'horse.png', 'recycle.png'],
+      includeAssets: [
+        'logo.jpeg',
+        'logo.png',
+        'pwa-icon-192.png',
+        'pwa-icon-512.png',
+        'horse.png',
+        'recycle.png',
+      ],
       manifest: {
         name: 'blabli',
         short_name: 'blabli',
@@ -15,26 +22,26 @@ export default defineConfig({
         theme_color: '#0f487d',
         background_color: '#ffffff',
         display: 'standalone',
-        orientation: 'portrait-primary',
+        orientation: 'any',
         scope: '/',
-        start_url: '/',
+        start_url: '/?source=pwa',
         lang: 'ar',
         dir: 'rtl',
         icons: [
           {
-            src: '/logo.png',
+            src: '/pwa-icon-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/logo.png',
+            src: '/pwa-icon-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: '/logo.png',
+            src: '/pwa-icon-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',

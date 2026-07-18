@@ -18,6 +18,7 @@ import ServiceDetails from './pages/ServiceDetails';
 import CategoryProducts from './pages/CategoryProducts';
 import ProductDetails from './pages/ProductDetails';
 import LoadingScreen from './components/LoadingScreen';
+import InstallPWA from './components/InstallPWA';
 import type { StoreSettings, Banner } from './types/database';
 import { ThemeProvider } from './theme/ThemeContext';
 
@@ -149,6 +150,7 @@ function App() {
  )}
  <Footer storeSettings={storeSettings} />
  <WhatsAppButton />
+ <InstallPWA />
  </div>
  );
 
@@ -237,7 +239,7 @@ function StaggeredHome({
  <About />
  <CategoryCards />
  {/* Services component is part of the staggered load */}
- <Services onLoaded={() => { /* Optionally handle service load */ }} />
+ <Services />
  {/* You can add more home page sections here to stagger them if needed */}
  </>
  );

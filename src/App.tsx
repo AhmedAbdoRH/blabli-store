@@ -137,7 +137,7 @@ function App() {
  background: '#ffffff',
  backgroundSize: 'cover',
  backgroundRepeat: 'no-repeat',
- backgroundAttachment: 'fixed',
+ backgroundAttachment: 'scroll',
  }}
  >
  <Header />
@@ -149,7 +149,6 @@ function App() {
  <Testimonials />
  )}
  <Footer storeSettings={storeSettings} />
- <WhatsAppButton />
  <InstallPWA />
  </div>
  );
@@ -164,6 +163,7 @@ function App() {
  }
 
  return (
+ <>
  <ThemeProvider>
  <CartProvider>
  <Helmet>
@@ -217,6 +217,8 @@ function App() {
  </Router>
  </CartProvider>
  </ThemeProvider>
+ <WhatsAppButton />
+ </>
  );
 }
 

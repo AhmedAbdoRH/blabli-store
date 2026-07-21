@@ -210,7 +210,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const message = `مرحباً، أود طلب المنتجات التالية:%0A%0A${orderDetails}%0A%0Aالإجمالي: ${cartTotal} ج%0A%0Aشكراً لكم!`;
     
     // Open WhatsApp with the order details
-window.open(`https://wa.me/201099490594?text=${message}`, '_blank');
+window.open(`https://wa.me/201050827788?text=${message}`, '_blank');
     
     // Close the cart after sending
     toggleCart();

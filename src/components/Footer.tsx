@@ -47,33 +47,27 @@ export default function Footer({ storeSettings }: FooterProps) {
             )}
           </div>
 
-          {/* العمود الثاني: روابط سريعة */}
-          <div>
-            <h3 className="text-lg font-bold mb-5 flex items-center gap-2">
-              <span className="w-1 h-5 bg-brand rounded-full"></span>
-              روابط سريعة
-            </h3>
-            <ul className="space-y-3 text-gray-300">
-              <li>
-                <Link to="/" className="hover:text-brand transition-colors duration-300 flex items-center gap-2 group">
-                  <span className="w-0 group-hover:w-3 h-px bg-brand transition-all duration-300"></span>
-                  الرئيسية
-                </Link>
-              </li>
-              <li>
-                <Link to="/#products" className="hover:text-brand transition-colors duration-300 flex items-center gap-2 group">
-                  <span className="w-0 group-hover:w-3 h-px bg-brand transition-all duration-300"></span>
-                  المنتجات
-                </Link>
-              </li>
-              <li>
-                <a href="https://wa.me/201099490594" target="_blank" rel="noopener noreferrer" className="hover:text-brand transition-colors duration-300 flex items-center gap-2 group">
-                  <span className="w-0 group-hover:w-3 h-px bg-brand transition-all duration-300"></span>
-                  تواصل معنا
-                </a>
-              </li>
-            </ul>
-          </div>
+{/* العمود الثاني: روابط سريعة */}
+           <div>
+             <h3 className="text-lg font-bold mb-5 flex items-center gap-2">
+               <span className="w-1 h-5 bg-brand rounded-full"></span>
+               روابط سريعة
+             </h3>
+             <ul className="space-y-3 text-gray-300">
+               <li>
+                 <Link to="/" className="hover:text-brand transition-colors duration-300 flex items-center gap-2 group">
+                   <span className="w-0 group-hover:w-3 h-px bg-brand transition-all duration-300"></span>
+                   الرئيسية
+                 </Link>
+               </li>
+               <li>
+                 <Link to="/#products" className="hover:text-brand transition-colors duration-300 flex items-center gap-2 group">
+                   <span className="w-0 group-hover:w-3 h-px bg-brand transition-all duration-300"></span>
+                   المنتجات
+                 </Link>
+               </li>
+             </ul>
+           </div>
 
           {/* العمود الثالث: تواصل */}
           <div>
@@ -86,13 +80,13 @@ export default function Footer({ storeSettings }: FooterProps) {
                 <div className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 flex-shrink-0">
                   <Phone className="h-4 w-4 text-brand-300" />
                 </div>
-                <a href="tel:01222582955" dir="ltr" className="hover:text-brand transition-colors">0122 258 2955</a>
+                <a href="tel:01050827788" dir="ltr" className="hover:text-brand transition-colors">010 508 27788</a>
               </li>
               <li className="flex items-center gap-3">
                 <div className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 flex-shrink-0">
                   <MessageCircle className="h-4 w-4 text-brand-300" />
                 </div>
-                <a href="https://wa.me/201099490594" target="_blank" rel="noopener noreferrer" className="hover:text-brand transition-colors">واتساب: 01099490594</a>
+                <a href="https://wa.me/201050827788" target="_blank" rel="noopener noreferrer" className="hover:text-brand transition-colors">واتساب: 01050827788</a>
               </li>
               <li className="flex items-center gap-3">
                 <div className="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 flex-shrink-0">

@@ -65,7 +65,7 @@ export default function ProductDetails() {
     if (!service) return;
     const productUrl = window.location.href;
     const message = `استفسار عن المنتج: ${service.title}\nرابط المنتج: ${productUrl}`;
-    window.open(`https://wa.me/201099490594?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://wa.me/201050827788?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   const handleShare = () => {

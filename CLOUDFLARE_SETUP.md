@@ -2,6 +2,10 @@
 
 هذا المشروع تم إعداده للعمل على Cloudflare Workers مع React + Vite + TypeScript.
 
+## GitHub Actions التلقائي
+✅ يتم النشر تلقائياً عند كل push إلى GitHub
+✅ مرفوط بالدومين: blabli-store.com و www.blabli-store.com
+
 ## الإعداد المكتمل
 
 ### 1. التثبيتات

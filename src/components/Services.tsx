@@ -33,7 +33,7 @@ export default function Services() {
       setError(null);
       const { data, error } = await supabase
         .from('services')
-        .select(`*, category:categories(*), product_images(image_url)`)
+        .select(`*, product_images(image_url)`)
         .order('created_at', { ascending: false });
       if (error) throw error;
       setServices(data || []);

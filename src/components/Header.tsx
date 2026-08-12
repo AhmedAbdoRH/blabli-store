@@ -51,7 +51,7 @@ export default function Header() {
     try {
       const { data: services, error } = await supabase
         .from('services')
-        .select(`*, category:categories(*), product_images(image_url)`)
+        .select(`*, product_images(image_url)`)
         .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
         .limit(10);
       if (error) throw error;

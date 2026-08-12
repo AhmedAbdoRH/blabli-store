@@ -163,7 +163,7 @@ export default function AdminDashboard({ onSettingsUpdate }: AdminDashboardProps
 
       const { data: servicesData, error: servicesError } = await supabase
         .from('services')
-        .select(`*, category:categories(*)`)
+        .select(`*`)
         .order('created_at', { ascending: false });
       if (servicesError) throw servicesError;
       setServices(servicesData || []);

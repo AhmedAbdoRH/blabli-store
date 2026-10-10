@@ -1,0 +1,7 @@
+{
+  "name": "blabli",
+  "description": "blabli - الأناقة والاحترافية في عالم الأزياء الموحدة. خامات فاخرة وتصاميم تعكس هوية فريقك.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -28,10 +28,10 @@ export default function BannerSlider({ banners }: BannerSliderProps) {
   // التشغيل التلقائي
   useEffect(() => {
     if (banners.length <= 1 || isPaused) return;
-    timeoutRef.current && clearTimeout(timeoutRef.current);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => next(), SLIDE_INTERVAL);
     return () => {
-      timeoutRef.current && clearTimeout(timeoutRef.current);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [current, banners.length, isPaused, next]);
 

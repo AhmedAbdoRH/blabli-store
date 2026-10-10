@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Download, Share, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -7,6 +8,7 @@ import {
   isIosDevice,
   isStandaloneMode,
   onInstallPromptReady,
+  setPwaPromptVisibility,
   triggerPwaInstall,
 } from '../lib/pwaInstall';
 
@@ -68,6 +70,13 @@ export default function InstallPWA() {
     };
   }, [refreshCanInstall]);
 
+  useEffect(() => {
+    setPwaPromptVisibility(visible);
+    return () => {
+      setPwaPromptVisibility(false);
+    };
+  }, [visible]);
+
   const dismiss = () => {
     setVisible(false);
     setStatusMessage(null);
@@ -114,9 +123,9 @@ export default function InstallPWA() {
     }
   };
 
-  if (isStandaloneMode()) return null;
+  if (isStandaloneMode() || typeof document === 'undefined') return null;
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {visible && (
         <motion.div
@@ -124,7 +133,7 @@ export default function InstallPWA() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-20 left-4 right-4 z-[110] mx-auto max-w-md sm:bottom-4"
+          className="fixed bottom-4 left-3 right-3 z-50 mx-auto max-w-md sm:bottom-6 sm:right-6 sm:left-auto sm:max-w-sm sm:w-full"
           dir="rtl"
           role="dialog"
           aria-labelledby="pwa-install-title"
@@ -225,6 +234,7 @@ export default function InstallPWA() {
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

@@ -78,3 +78,31 @@ export async function triggerPwaInstall(): Promise<'accepted' | 'dismissed' | 'u
     return 'unavailable';
   }
 }
+
+const VISIBILITY_EVENT = 'blabli-pwa-visibility-change';
+let isPromptVisible = false;
+
+export function setPwaPromptVisibility(visible: boolean): void {
+  isPromptVisible = visible;
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent(VISIBILITY_EVENT, { detail: { visible } })
+    );
+  }
+}
+
+export function onPwaPromptVisibilityChange(
+  callback: (visible: boolean) => void
+): () => void {
+  if (typeof window === 'undefined') return () => {};
+  const handler = (e: Event) => {
+    const custom = e as CustomEvent<{ visible: boolean }>;
+    callback(custom.detail?.visible ?? false);
+  };
+  window.addEventListener(VISIBILITY_EVENT, handler);
+  return () => window.removeEventListener(VISIBILITY_EVENT, handler);
+}
+
+export function getIsPwaPromptVisible(): boolean {
+  return isPromptVisible;
+}
